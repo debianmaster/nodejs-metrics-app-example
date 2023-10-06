@@ -16,6 +16,8 @@ spec:
         kuma.io/sidecar-injection: "enabled"
       annotations:
         kuma.io/mesh: "default"
+        prometheus.metrics.kuma.io/aggregate-application-port: "3000"
+        prometheus.metrics.kuma.io/aggregate-application-path: "/metrics"        
     spec:
       containers:
         - name: nodejs-example
