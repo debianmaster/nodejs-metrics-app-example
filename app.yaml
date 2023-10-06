@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-example-deployment
+  labels:
+    app: nodejs-example
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nodejs-example
+  template:
+    metadata:
+      labels:
+        app: nodejs-example
+        kuma.io/sidecar-injection: "enabled"
+      annotations:
+        kuma.io/mesh: "default"
+    spec:
+      containers:
+        - name: nodejs-example
+          image: docker.io/debianmaster/nodejs-prometheus-example
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-example-service
+spec:
+  selector:
+    app: nodejs-example
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
